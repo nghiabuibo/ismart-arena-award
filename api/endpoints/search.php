@@ -30,11 +30,9 @@ if (empty($entries['entries'])) {
 	die();
 }
 
-$entry = $entries['entries'][0];
-
 $responsePayload = [
 	'headers' => $entries['headers'],
-	'entry' => $entry
+	'entries' => $entries['entries']
 ];
 $jwt = JWT::encode($responsePayload, GG_API_KEY, 'HS256');
 $responsePayload['jwt'] = $jwt;

@@ -16,7 +16,7 @@ try {
 		return 'Error: ' . $payload->error;
 	};
 
-	$entry = $payload->entry;
+	$entries = $payload->entries;
 	require_once __DIR__ . '/../templates/scholarship.php';
 } catch (Exception $e) {
 	echo 'Error: ' . $e->getMessage();

@@ -27,6 +27,16 @@ function getFormData($form) {
 	return indexed_array;
 }
 
+const errorRow = (message) => {
+	return `
+		<tr>
+			<td class="text-center">
+				${message}
+			</td>
+		</tr>
+	`
+}
+
 $('#search_form').on('submit', function (e) {
 	e.preventDefault();
 	showSearchLoading();
@@ -43,47 +53,43 @@ $('#search_form').on('submit', function (e) {
 		data: JSON.stringify(getFormData($(this))),
 		success: function (result) {
 			if (result.data?.status < 200 && result.data?.status > 300) {
-				resultTable.bodyHTML = `
-				<tr>
-					<td class="text-center">
-						${result.data.message}
-					</td>
-				</tr>
-				`;
-				return;
+				resultTable.bodyHTML = errorRow(result.data.message)
+				return
+			}
+
+			const headers = result.data?.headers
+			const [entry] = result.data?.entries
+
+			if (!headers || !entry) {
+				resultTable.bodyHTML = errorRow(result.data.message)
+				return
 			}
 
 			const skipColumns = [0, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
 			resultTable.headerHTML = '<tr>';
-			for (i = 0; i < result.data?.headers.length; i++) {
+			for (i = 0; i < headers.length; i++) {
 				if (skipColumns.includes(i)) continue
 
 				resultTable.headerHTML += '<th scope="col">';
-				resultTable.headerHTML += result.data?.headers[i];
+				resultTable.headerHTML += headers[i];
 				resultTable.headerHTML += '</th>';
 			}
 			resultTable.headerHTML += '<th scope="col">Tải Học bổng</th>'
 			resultTable.headerHTML += '</tr>';
 
 			resultTable.bodyHTML = '<tr>';
-			for (i = 0; i < result.data?.entry.length; i++) {
+			for (i = 0; i < entry.length; i++) {
 				if (skipColumns.includes(i)) continue
 				resultTable.bodyHTML += '<td>';
-				resultTable.bodyHTML += result.data?.entry[i];
+				resultTable.bodyHTML += entry[i];
 				resultTable.bodyHTML += '</td>';
 			}
 			resultTable.bodyHTML += `<td><a target="_blank" class="btn btn-success btn-sm" href="api/?action=download&jwt=${result.data?.jwt}"><i class="bi bi-download"></i></a></td>`
 			resultTable.bodyHTML += '</tr>';
 		},
 		error: function (err) {
-			resultTable.bodyHTML = `
-			<tr>
-				<td class="text-center">
-					${err.responseJSON?.message}
-				</td>
-			</tr>
-			`;
+			resultTable.bodyHTML = errorRow(err.responseJSON?.message)
 		},
 		complete: function () {
 			showSearchResult(resultTable)
