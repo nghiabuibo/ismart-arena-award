@@ -70,7 +70,7 @@
 							<span class="visually-hidden">Loading...</span>
 						</div>
 					</div>
-					<table class="table table-light table-hover table-striped mt-5 text-center d-none" id="search_result">
+					<table class="table table-light table-hover table-striped mt-5 text-center rounded overflow-hidden d-none" id="search_result">
 						<thead>
 
 						</thead>
