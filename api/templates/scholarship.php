@@ -8,10 +8,6 @@ $pageLayout = [
 	'scholarship' => [
 		'bg_path' => __DIR__ . '/../assets/pdf/ismart-scholarship.pdf',
 		'dimension' => [1754, 1241]
-	],
-	'scholarship2' => [
-		'bg_path' => __DIR__ . '/../assets/pdf/certificate-arena1.pdf',
-		'dimension' => [1754, 1241]
 	]
 ];
 
@@ -61,10 +57,7 @@ foreach ($entries as $index => $entry) {
 	$name = $entry[1];
 	$prize_text = $entry[4];
 	$prize = $entry[5];
-	$scholarship_amount = $entry[6];
-	$scholarship2 = $entry[7];
 	$date_signed = $entry[8];
-	$date_expired = $entry[9];
 
 	/* Page 1 */
 	$width = $pageLayout['certificate']['dimension'][0];
@@ -81,16 +74,16 @@ foreach ($entries as $index => $entry) {
 	$pdf->useTemplate($tplId, 0, 0, $width);
 
 	$pdf->SetTextColor(240, 74, 36);
-	$pdf->SetFont($mont_b, '', 80, false);
-	$pdf->writeHTMLCell($width - 420, 300, 420, 620, $name, 0, 0, false, true, 'C');
+	$pdf->SetFont($mont_b, '', 90, false);
+	$pdf->writeHTMLCell($width, 300, 0, 555, $name, 0, 0, false, true, 'C');
 
-	$pdf->SetTextColor(0, 0, 102);
-	$pdf->SetFont($mont, '', 40, false);
-	$html = $prize_text . ' <span style="font-family: ' . $mont_b . '">' . $prize . '</span>';
-	$pdf->writeHTMLCell($width - 420, 300, 420, 750, $html, 0, 0, false, true, 'C');
-
+	$pdf->SetTextColor(33, 29, 29);
 	$pdf->SetFont($mont, '', 36, false);
-	$pdf->writeHTMLCell($width - 280, 300, 0, 1005, $date_signed, 0, 0, false, true, 'C');
+	$html = $prize_text . ' <span style="font-family: ' . $mont_b . '">' . $prize . '</span>';
+	$pdf->writeHTMLCell($width, 300, 0, 690, $html, 0, 0, false, true, 'C');
+
+	$pdf->SetFont($mont_i, '', 32, false);
+	$pdf->writeHTMLCell($width, 300, 205, 920, $date_signed, 0, 0, false, true, 'L');
 	/* End Page 1 */
 }
 
@@ -99,9 +92,8 @@ foreach ($entries as $index => $entry) {
 	$prize_text = $entry[4];
 	$prize = $entry[5];
 	$scholarship_amount = $entry[6];
-	$scholarship2 = $entry[7];
 	$date_signed = $entry[8];
-	$date_expired = $entry[9];
+	$date_expired = $entry[11];
 
 	/* Page 2 */
 	$width = $pageLayout['scholarship']['dimension'][0];
@@ -117,55 +109,27 @@ foreach ($entries as $index => $entry) {
 	// use the imported page and place it at point 0, 0 with a width equal to layout width (fullpage)
 	$pdf->useTemplate($tplId, 0, 0, $width);
 
-	$pdf->SetTextColor(44, 51, 147);
-	$pdf->SetFont($mont_b, '', 80, false);
+	$pdf->SetTextColor(240, 74, 36);
+	$pdf->SetFont($mont_b, '', 90, false);
 	$pdf->writeHTMLCell($width, 300, 0, 520, $name, 0, 0, false, true, 'C');
 
-	$pdf->SetFont($mont_b, '', 80, false);
-	$pdf->writeHTMLCell($width, 300, 0, 710, $scholarship_amount, 0, 0, false, true, 'C');
+	$pdf->SetTextColor(33, 29, 29);
+	$pdf->SetFont($mont_b, '', 32, false);
+	$pdf->writeHTMLCell($width, 300, 0, 665, "ĐÃ XUẤT SẮC NHẬN ĐƯỢC BỌC BỔNG $scholarship_amount", 0, 0, false, true, 'C');
 
-	$pdf->SetTextColor(33, 33, 33);
-	$pdf->SetFont($mont_i, '', 20, false);
-	$pdf->writeHTMLCell(300, 100, 532, 954, $date_signed);
+	$pdf->SetFont($mont, '', 28, false);
+	$pdf->writeHTMLCell($width, 300, 0, 715, "Has been excellently award the scholarship with the amount of $scholarship_amount", 0, 0, false, true, 'C');
+
+	$pdf->SetFont($mont_i, '', 30, false);
+	$pdf->writeHTMLCell($width, 300, 285, 835, $date_signed, 0, 0, false, true, 'L');
+
+	$pdf->SetTextColor(255, 255, 255);
+	$pdf->SetFont($mont_b, '', 20, false);
+	$pdf->writeHTMLCell($width, 80, 1378, 1110, $date_expired, 0, 0, false, true, 'L');
+
+	$pdf->SetFont($mont_i, '', 18, false);
+	$pdf->writeHTMLCell($width, 14, 1295, 1138, $date_expired, 0, 0, false, true, 'L');
 	/* End Page 2 */
-}
-
-foreach ($entries as $index => $entry) {
-	if ($index >= 1) break;
-
-	$name = $entry[1];
-	$prize_text = $entry[4];
-	$prize = $entry[5];
-	$scholarship_amount = $entry[6];
-	$scholarship2 = $entry[7];
-	$date_signed = $entry[8];
-	$date_expired = $entry[9];
-
-	/* Page 3 */
-	$width = $pageLayout['scholarship2']['dimension'][0];
-	$height = $pageLayout['scholarship2']['dimension'][1];
-	// set the source file
-	$pdf->setSourceFile($pageLayout['scholarship2']['bg_path']);
-
-	// add a page
-	$pdf->AddPage('L', $pageLayout['scholarship2']['dimension']);
-
-	// import scholarship page 1
-	$tplId = $pdf->importPage(1);
-	// use the imported page and place it at point 0, 0 with a width equal to layout width (fullpage)
-	$pdf->useTemplate($tplId, 0, 0, $width);
-
-	$pdf->SetTextColor(44, 51, 147);
-	$pdf->SetFont($mont_b, '', 80, false);
-	$pdf->writeHTMLCell($width, 300, 0, 520, $name, 0, 0, false, true, 'C');
-
-	$pdf->SetFont($mont_b, '', 60, false);
-	$pdf->writeHTMLCell($width, 300, 0, 750, $scholarship2, 0, 0, false, true, 'C');
-
-	$pdf->SetTextColor(33, 33, 33);
-	$pdf->SetFont($mont_i, '', 20, false);
-	$pdf->writeHTMLCell(300, 100, 532, 954, $date_signed);
-	/* End Page 3 */
 }
 
 // ---------------------------------------------------------
